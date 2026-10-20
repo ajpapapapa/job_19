@@ -1,6 +1,18 @@
 import requests
+from bs4 import BeautifulSoup
 
-r = requests.get('https://job.incruit.com/jobdb_list/searchjob.asp?rgn2=13&rgn2=11')
-print(r.status_code)
+keyword = "건축기사"
+url = f"https://search.incruit.com/list/search.asp?col=all&src=gsw*www&kw={keyword}"
+r = requests.get(url)
+# print(r.text)
 
-#request 요청인데 위의 사이트가서 get 했다. 
+soup = BeautifulSoup(r.text, "html.parser")
+# print(soup.prettify())
+
+lis = soup.find_all("li", class_="c_col")
+# print(lis)
+# print(len(lis))
+
+for li in lis:
+    company = li.find("a", class_="cpname")
+    print(company)
