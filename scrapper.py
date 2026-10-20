@@ -2,47 +2,48 @@ import requests
 from bs4 import BeautifulSoup
 
 keyword = "건축기사"
-pages = 2
+pages = 5
 jobs = []
 
-for i in range(pages):
-    page = i * 30
-                                                                                
-    url = f"https://search.incruit.com/list/search.asp?col=job&kw={keyword}&startno={page}"
-    r = requests.get(url)
-    # print(r.text)
+def search_incruit():
 
-    soup = BeautifulSoup(r.text, "html.parser")
-    # print(soup.prettify())
+    for i in range(pages):
+        page = i * 30
+                                                                                    
+        url = f"https://search.incruit.com/list/search.asp?col=job&kw={keyword}&startno={page}"
+        r = requests.get(url)
+        # print(r.text)
 
-    lis = soup.find_all("li", class_="c_col")
-    # print(lis)
-    # print(len(lis))
+        soup = BeautifulSoup(r.text, "html.parser")
+        # print(soup.prettify())
 
-    print(f"{i+1} 페이지 크롤링 중...")
+        lis = soup.find_all("li", class_="c_col")
+        # print(lis)
+        # print(len(lis))
 
-    for li in lis:
-        try:
-            company = li.find("a", class_="cpname").text
-            title = li.find("div", class_="cell_mid").find("a").text
-            location = li.find("div", class_="cl_md").find_all("span")[0].text
-            link = li.find("div", class_="cell_mid").find("a").get("href") #외부창 get
-            #print(company)
-            #print(title)
-            #print(location)
-            #print(link)
+        print(f"{i+1} 페이지 크롤링 중...")
 
-            job_data = {
-                "company" : company,
-                "title" : title,
-                "location" : location,
-                "link" : link
-            }
+        for li in lis:
+            try:
+                company = li.find("a", class_="cpname").text
+                title = li.find("div", class_="cell_mid").find("a").text
+                location = li.find("div", class_="cl_md").find_all("span")[0].text
+                link = li.find("div", class_="cell_mid").find("a").get("href") #외부창 get
+                #print(company)
+                #print(title)
+                #print(location)
+                #print(link)
 
-            jobs.append(job_data)
+                job_data = {
+                    "company" : company,
+                    "title" : title,
+                    "location" : location,
+                    "link" : link
+                }
 
-        except:
-            pass
+                jobs.append(job_data)
 
-    print(jobs)
-    print(len(jobs))
+            except:
+                pass
+
+    return jobs
