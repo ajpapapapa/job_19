@@ -1,12 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 
-keyword = "건축기사"
-pages = 5
-jobs = []
 
-def search_incruit():
 
+def search_incruit(keyword, pages=1):
+    jobs = []
     for i in range(pages):
         page = i * 30
                                                                                     
